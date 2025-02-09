@@ -1,2 +1,7 @@
-# Exp1
- WAP to implement the Perceptron Learning Algorithm using numpy in Python. Evaluate performance of a single perceptron for NAND and XOR truth tables as input dataset.
+Implementation of Perceptron Learning Algorithm .
+Implementation of Multi-Layer Perceptron
+Implementation of BPNN using TensorFlow Library
+Hyper-parameter tuning for a BPNN
+Implementation of CNN using Keras Library
+Implementation of RNN using PyTorch Library
+Implementation of Transfer Learning for medical dataset
