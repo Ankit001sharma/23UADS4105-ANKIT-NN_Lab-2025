@@ -1,4 +1,6 @@
-#93.67
+ """WAP to train and evaluate a convolutional neural network using Keras Library to classify MNIST fashion dataset. Demonstrate the 
+effect of filter size, regularization, batch size and optimization algorithm on model performance."""
+
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers, regularizers
