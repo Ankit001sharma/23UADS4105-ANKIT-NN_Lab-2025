@@ -1,174 +1,59 @@
-# Time Series Prediction using RNN in PyTorch(Object 6:WAP to train and evaluate a Recurrent Neural Network using PyTorch Library to predict the next value in a sample time series dataset.)
+Time Series Forecasting Using Recurrent Neural Networks
+This document provides a comprehensive overview of utilizing Recurrent Neural Networks (RNNs) for time series forecasting, specifically focusing on predicting daily minimum temperatures in Melbourne, Australia.
 
-This project demonstrates how to build and train a **Recurrent Neural Network (RNN)** using the **PyTorch** framework to predict the next value in a time series dataset. The model is trained to forecast the next day’s **minimum temperature** using historical daily data.
+Dataset Overview
+Dataset Name: Daily Minimum Temperatures in Melbourne
 
----
+Description: This dataset comprises daily minimum temperatures recorded in Melbourne over a span of 10 years, from 1981 to 1990. It contains 3,650 observations, with each entry representing the minimum temperature of a specific day measured in degrees Celsius. The data was collected by the Australian Bureau of Meteorology and is publicly available for analysis.
 
-##  Dataset Description
+Source: Australian Bureau of Meteorology
 
-###  Dataset: Daily Minimum Temperatures
+Project Objective
+The primary goal of this project is to develop a predictive model capable of forecasting the next day's minimum temperature based on historical data. By leveraging the sequential nature of temperature records, the model aims to capture temporal patterns and trends to make accurate predictions.
 
-- **Source:** [Jason Brownlee - UCI ML Repository](https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv)
-- **Location:** Melbourne, Australia
-- **Time Range:** January 1981 to December 1990
-- **Columns:**
-  - `Date`: Date in YYYY-MM-DD format
-  - `Temp`: Daily minimum temperature in degrees Celsius
+Methodology
+1. Data Preprocessing
+Before feeding the data into the model, several preprocessing steps are undertaken:
 
-We only use the `Temp` column for time series forecasting.
+Normalization: Temperature values are scaled to a range between 0 and 1. This step ensures that the model trains efficiently and converges faster by standardizing the input values.
 
----
+Sequence Creation: The dataset is transformed into overlapping sequences. Each sequence consists of 30 consecutive days of temperature data, with the subsequent day’s temperature serving as the target variable. This approach allows the model to learn from a window of past observations to predict future values.
 
-##  Code Explanation
+2. Model Architecture
+The predictive model is structured as follows:
 
-###  Step 1: Import Required Libraries
+Recurrent Neural Network (RNN): At its core, the model employs an RNN layer with 64 hidden units. RNNs are particularly suited for sequential data as they possess the capability to retain information from previous inputs, making them ideal for time series forecasting.
 
-```python
-import torch
-import torch.nn as nn
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-from sklearn.preprocessing import MinMaxScaler
-torch, torch.nn: Build and train the RNN model.
+Fully Connected Layer: Following the RNN layer, a dense (fully connected) layer is used to produce the final output, which is the predicted temperature for the next day.
 
-numpy, pandas: Data manipulation and loading.
+3. Training Process
+The model undergoes training over 100 epochs, utilizing the following configurations:
 
-matplotlib.pyplot: Visualize the predictions.
+Loss Function: Mean Squared Error (MSE) is employed to quantify the difference between the predicted and actual temperature values. MSE is a standard loss function for regression tasks, penalizing larger errors more significantly.
 
-MinMaxScaler: Normalize the temperature values to a range [0, 1] for better training performance.
+Optimizer: The Adam optimizer is chosen for its adaptive learning rate properties, facilitating efficient and effective training.
 
-Step 2: Load and Preprocess the Dataset
-python
+4. Evaluation and Visualization
+Post-training, the model's performance is evaluated on a test dataset. The predicted temperatures are compared against the actual recorded values. For clarity and insight, the results are visualized using line plots, where:
 
-url = "https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv"
-df = pd.read_csv(url)
-temps = df['Temp'].values.astype('float32').reshape(-1, 1)
+The x-axis represents the time steps (days).
 
-scaler = MinMaxScaler()
-temps_scaled = scaler.fit_transform(temps)
-Reads the dataset from the URL.
+The y-axis denotes the temperature in degrees Celsius.
 
-Extracts and reshapes the temperature values.
+Two lines are plotted: one for actual temperatures and another for predicted values, allowing for a visual assessment of the model's accuracy.
 
-Normalizes the values using MinMaxScaler to ensure efficient learning.
+Tools and Libraries Used
+PyTorch: An open-source deep learning framework that provides flexibility and speed in building and training neural networks.
 
-Step 3: Create Input Sequences
-python
+Pandas: A data manipulation library essential for handling and processing structured data.
 
-def create_sequences(data, seq_length):
-    X, y = [], []
-    for i in range(len(data) - seq_length):
-        X.append(data[i:i + seq_length])
-        y.append(data[i + seq_length])
-    return np.array(X), np.array(y)
-Generates sequences of length 30 from the time series.
+NumPy: A fundamental package for numerical computations in Python.
 
-Each sequence (X) is used to predict the next time step (y).
+Matplotlib: A plotting library used to create static, animated, and interactive visualizations.
 
-Step 4: Convert to Tensors and Split Dataset
-python
+Scikit-learn: A machine learning library that offers simple and efficient tools for data mining and analysis, including preprocessing utilities like data normalization.
 
-X = torch.tensor(X, dtype=torch.float32)
-y = torch.tensor(y, dtype=torch.float32)
+Conclusion
+By harnessing the capabilities of Recurrent Neural Networks, this project effectively models the sequential patterns inherent in daily temperature data. The resulting model demonstrates the potential of deep learning techniques in time series forecasting, offering insights that can be valuable for various applications, from weather prediction to climate research.
 
-train_size = int(len(X) * 0.8)
-X_train, X_test = X[:train_size], X[train_size:]
-y_train, y_test = y[:train_size], y[train_size:]
-Converts the input and output arrays into PyTorch tensors.
-
-Splits the dataset into training (80%) and testing (20%) sets.
-
-Step 5: Define the RNN Model
-python
-
-class RNNModel(nn.Module):
-    def __init__(self, input_size=1, hidden_size=64, output_size=1):
-        super(RNNModel, self).__init__()
-        self.rnn = nn.RNN(input_size, hidden_size, batch_first=True)
-        self.fc = nn.Linear(hidden_size, output_size)
-
-    def forward(self, x):
-        out, _ = self.rnn(x)
-        out = self.fc(out[:, -1, :])  # last time step
-        return out
-Defines a simple RNN model:
-
-nn.RNN: A standard RNN layer.
-
-nn.Linear: Maps the hidden state to the final output.
-
-The last hidden state is used to predict the next value in the sequence.
-
-Step 6: Train the Model
-python
-
-model = RNNModel()
-criterion = nn.MSELoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
-Loss Function: Mean Squared Error (MSE)
-
-Optimizer: Adam with learning rate 0.01
-
-python
-
-epochs = 100
-for epoch in range(epochs):
-    model.train()
-    optimizer.zero_grad()
-    output = model(X_train)
-    loss = criterion(output, y_train)
-    loss.backward()
-    optimizer.step()
-
-    if (epoch + 1) % 10 == 0:
-        print(f"Epoch {epoch + 1}/{epochs}, Loss: {loss.item():.4f}")
-Trains the model for 100 epochs.
-
-Prints the loss every 10 epochs.
-
-Step 7: Evaluate the Model
-python
-
-model.eval()
-with torch.no_grad():
-    predictions = model(X_test).numpy()
-    predictions = scaler.inverse_transform(predictions)
-    actual = scaler.inverse_transform(y_test.numpy())
-Puts the model in evaluation mode.
-
-Predicts the values on the test set.
-
-Scales back the predictions and actual values to the original Celsius range.
-
-Step 8: Plot the Results
-python
-plt.figure(figsize=(12, 6))
-plt.plot(range(len(actual)), actual, label="Actual")
-plt.plot(range(len(predictions)), predictions, label="Predicted", linestyle="--")
-plt.title("RNN Prediction - Daily Minimum Temperatures")
-plt.xlabel("Time Step")
-plt.ylabel("Temperature (Celsius)")
-plt.legend()
-plt.show()
-Plots the actual and predicted temperatures to visually compare the performance.
-
-Requirements
-Install the required libraries using pip:
-
-pip install torch pandas numpy matplotlib scikit-learn
-🔮 Possible Improvements
-Replace nn.RNN with nn.LSTM or nn.GRU for better performance.
-
-Introduce multi-step forecasting (predict the next 7 days instead of just one).
-
-Add additional features like humidity, wind, etc., for multivariate time series.
-
-Experiment with different optimizers and hyperparameters.
-
-
-
-
-
-
-
+Note: For a deeper understanding of RNNs and their applications in time series forecasting, consider exploring resources such as Time Series Forecasting with Recurrent Neural Networks.
