@@ -59,7 +59,7 @@
 ## Training Configuration
 ### Loss Function: Mean Squared Error (nn.MSELoss)
 
-## Optimizer: Adam Optimizer with a learning rate of 0.01
+### Optimizer: Adam Optimizer with a learning rate of 0.01
 
 ### Epochs: 100
 
@@ -68,40 +68,40 @@
 
 ### Gradients are cleared using optimizer.zero_grad().
 
-### The forward pass is computed.
+#### The forward pass is computed.
 
-### The loss is calculated and backpropagated.
+#### The loss is calculated and backpropagated.
 
-### Optimizer updates the weights.
+#### Optimizer updates the weights.
 
-### Loss is printed every 10 epochs for tracking.
+#### Loss is printed every 10 epochs for tracking.
 
 ## Model Evaluation
-### After training, the model is set to evaluation mode using model.eval().
+#### After training, the model is set to evaluation mode using model.eval().
 
-### Predictions are made on the test set using torch.no_grad() to disable gradient calculations.
+#### Predictions are made on the test set using torch.no_grad() to disable gradient calculations.
 
-### Both predictions and actual values are inverse-transformed back to the original temperature scale for comparison.
+#### Both predictions and actual values are inverse-transformed back to the original temperature scale for comparison.
 
 ## Visualization
-### A plot is created comparing:
+#### A plot is created comparing:
 
-### Actual temperature values (from the test set)
+#### Actual temperature values (from the test set)
 
-### Predicted values (from the RNN)
+#### Predicted values (from the RNN)
 
-### The x-axis represents the time steps, and the y-axis represents the temperature in Celsius.
+#### The x-axis represents the time steps, and the y-axis represents the temperature in Celsius.
 
-### This visualization helps assess how accurately the RNN model forecasts temperature trends.
+#### This visualization helps assess how accurately the RNN model forecasts temperature trends.
 
 ## Conclusion
-### This project showcases:
+#### This project showcases:
 
-### How to preprocess time series data for sequence learning
+#### How to preprocess time series data for sequence learning
 
-### How to design a basic RNN architecture in PyTorch
+#### How to design a basic RNN architecture in PyTorch
 
-### How to train and evaluate an RNN model for regression tasks
+#### How to train and evaluate an RNN model for regression tasks
 
-### Visualization of actual vs predicted values for insight into model performance
+#### Visualization of actual vs predicted values for insight into model performance
 
