@@ -6,13 +6,13 @@
 ## Technologies & Libraries Used
 ### PyTorch (torch): Used to create and train the RNN model.
 
-## NumPy (numpy): For efficient numerical operations and array manipulations.
+### NumPy (numpy): For efficient numerical operations and array manipulations.
 
-## Pandas (pandas): To read and handle the dataset (CSV format).
+### Pandas (pandas): To read and handle the dataset (CSV format).
 
-## Matplotlib (matplotlib.pyplot): For plotting the actual vs predicted values.
+### Matplotlib (matplotlib.pyplot): For plotting the actual vs predicted values.
 
-## Scikit-learn (sklearn.preprocessing.MinMaxScaler): For normalizing temperature values between 0 and 1, which helps in faster and more stable model training.
+### Scikit-learn (sklearn.preprocessing.MinMaxScaler): For normalizing temperature values between 0 and 1, which helps in faster and more stable model training.
 
 ## Dataset Information
 ### Source: Public dataset hosted at JBrownlee’s GitHub
